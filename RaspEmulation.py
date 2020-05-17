@@ -69,6 +69,24 @@ emailId = '2017he12520@wilp.bits-pilani.ac.in'
 
 #-----------------------------------------------------------------
 
+def send_mail(toaddr, text):
+    
+    fromaddr = "patientName@gmail.com"
+    #toaddr = "2017he12520@wilp.bitspilani.ac.in"
+    msg = MIMEMultipart()
+    msg['From'] = fromaddr
+    msg['To'] = toaddr
+    msg['Subject'] = "Alert Message from Health Monitor device!!!"
+    body = "Alert Message :" + text + "    " + " Check immediately Thank you"
+    
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(fromaddr, "mtechelegant@123")
+    text = msg.as_string()
+    server.sendmail(fromaddr, toaddr, text)
+    print("Mail sent")
+    server.quit()
+    return
 
 class Adafruit_CharLCD(object):
 
@@ -113,26 +131,6 @@ class Adafruit_CharLCD(object):
     LCD_1LINE               = 0x00
     LCD_5x10DOTS            = 0x04
     LCD_5x8DOTS             = 0x00
-
-def send_mail(toaddr, text):
-    
-    fromaddr = "patientName@gmail.com"
-    #toaddr = "2017he12520@wilp.bitspilani.ac.in"
-    msg = MIMEMultipart()
-    msg['From'] = fromaddr
-    msg['To'] = toaddr
-    msg['Subject'] = "Alert Message from Health Monitor device!!!"
-    body = "Alert Message :" + text + "    " + " Check immediately Thank you"
-    
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(fromaddr, "mtechelegant@123")
-    text = msg.as_string()
-    server.sendmail(fromaddr, toaddr, text)
-    print("Mail sent")
-    server.quit()
-    return 
-    
     
     def __init__(self, pin_rs=20, pin_e=21, pins_db=[6, 13, 19, 26], GPIO=None):
         # Emulate the old behavior of using RPi.GPIO if we haven't been given
@@ -455,7 +453,7 @@ def gsm_init():
     
 #----------------------------------------------------------------------------------
 
-def checkAnyCritical()
+def checkAnyCritical():
     '''Select the Modem Serial'''
     #GPIO.output(GSM_SERIAL, GPIO.HIGH)
     #GPIO.output(GARDUNO_SERIAL, GPIO.LOW)
