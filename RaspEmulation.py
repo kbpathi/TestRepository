@@ -503,11 +503,11 @@ def requestForSensorData():
     
     
     #Sending Data to serial
-    ARDUNO_SER.adrino.write("DATARQST")
+    ARDUNO_SER.write("DATARQST")
     
     '''insert sensor values into list'''    
     for i in range(1,3):
-        sensor_Data.insert(i, adrino.read())
+        sensor_Data.insert(i, ARDUNO_SER.read())
 
 #----------------------------------------------------------------------------------
     
