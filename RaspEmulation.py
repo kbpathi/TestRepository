@@ -22,6 +22,7 @@
 import time
 import serial
 import time
+import datetime
 import sys
 from time import sleep
 
@@ -331,7 +332,7 @@ class gsm():
 
 def sendGPRSdata():
     now = datetime.now()
-    timestamp = now.strftime("%Y%m%d%H:%M:%S")
+    timestamp = time.strftime("%Y%m%d%H%M%S")
     gsm_ser = serial.Serial()
     gsm_ser.port = "/dev/ttyAMA0"
     gsm_ser.baudrate = 9600
@@ -483,6 +484,7 @@ def checkAnyCritical():
     GSM = gsm(gsm_ser)
 
     ''' Check for any alert '''
+    i = 0
     if i == 1 and int(sensor_Data[i]) > 95:
         for i in emergency_Dial:            
             GSM.sendMessage(emergency_Dial[i],"Alert: Critical Heart Rate Ditected for Patient")
