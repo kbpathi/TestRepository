@@ -340,27 +340,27 @@ def sendGPRSdata():
     '''attach or detach the device to packet domain service'''
     GSM.sendCommand("AT+CGATT=1\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     '''Configure content type as GPRS'''
     GSM.sendCommand("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"\r");
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     '''Configure content type as GPRS'''
     GSM.sendCommand("AT+SAPBR=3,1,\"APN\",\"airtelgprs.com\"\r");
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     '''Configure barrier profile to open in GPRS context'''
     GSM.sendCommand("AT+SAPBR=1,1\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     '''initiate the http service'''
     GSM.sendCommand("AT+HTTPINIT\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     '''Send sensor data to database through PHP url page'''
     GSM.sendCommand("AT+HTTPPARA=\"URL\",\"http://someserverlocation.com/putnewdata.php?")
@@ -374,22 +374,22 @@ def sendGPRSdata():
     GSM.sendCommand(sensor_Data[2])
     GSM.sendCommand("\r\r")
     time.sleep(5)
-    if( GSM.getResponse() != 'OK'): return FALSE     
+    if( GSM.getResponse() != 'OK'): return False     
 
     '''Get http session start '''
     GSM.sendCommand("AT+HTTPACTION=0\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
    
     ''' read the data from http server '''
     GSM.sendCommand("AT+HTTPREAD\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     ''' Terminate http service '''
     GSM.sendCommand("AT+HTTPTERM\r") 
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE     
+    if( GSM.getResponse() != 'OK'): return False     
     
 #-----------------------------------------------------------------------------------------------
 def gsm_init():
@@ -422,35 +422,35 @@ def gsm_init():
     GSM = gsm(gsm_ser)
     GSM.sendCommand("AT+IPR=9600;&W")
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     """set SMS text Format"""
     GSM.sendCommand("AT+CMGF=1;&W")   
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     """Network registriation"""
     GSM.sendCommand("AT+CREG?")        
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
     
     """Network attach or detach the device to packet domain service"""
     GSM.sendCommand("AT+CGATT=1\r")     
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     ''' command brings up the GPRS'''
     GSM.sendCommand("AT+CIICR\r")
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     GSM.sendCommand("AT+CIFSR\r")
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     GSM.sendCommand("AT+CIPSPRT=1\r")
     time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return FALSE
+    if( GSM.getResponse() != 'OK'): return False
 
     
 #----------------------------------------------------------------------------------
