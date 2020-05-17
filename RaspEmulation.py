@@ -470,6 +470,16 @@ def checkAnyCritical():
     gsm_ser.parity = serial.PARITY_NONE
     gsm_ser.stopbits = serial.STOPBITS_ONE
     
+    try:
+        gsm_ser.open()
+        gsm_ser.flushInput()
+        gsm_ser.flushOutput()
+
+        
+    except:
+        print 'Cannot open serial port'
+        sys.exit()
+    
     GSM = gsm(gsm_ser)
 
     ''' Check for any alert '''
@@ -501,6 +511,14 @@ def requestForSensorData():
     ARDUNO_SER.parity = serial.PARITY_NONE
     ARDUNO_SER.stopbits = serial.STOPBITS_ONE
     
+    try:
+        ARDUNO_SER.open()
+        ARDUNO_SER.flushInput()
+        ARDUNO_SER.flushOutput()
+        
+    except:
+        print 'Cannot open serial port'
+        sys.exit()
     
     #Sending Data to serial
     ARDUNO_SER.write("DATARQST")
