@@ -249,6 +249,7 @@ class Adafruit_CharLCD(object):
         """ Send command to LCD """
         self.delayMicroseconds(1000)  # 1000 microsecond sleep
         bits = bin(bits)[2:].zfill(8)
+        '''
         self.GPIO.output(self.pin_rs, char_mode)
         for pin in self.pins_db:
             self.GPIO.output(pin, False)
@@ -262,7 +263,8 @@ class Adafruit_CharLCD(object):
             if bits[i] == "1":
                 self.GPIO.output(self.pins_db[::-1][i-4], True)
         self.pulseEnable()
-
+        '''
+        
     def delayMicroseconds(self, microseconds):
         seconds = microseconds / float(1000000)  # divide microseconds by 1 million for seconds
         sleep(seconds)
