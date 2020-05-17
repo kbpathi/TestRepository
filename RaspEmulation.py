@@ -489,8 +489,19 @@ def requestForSensorData():
     #GPIO.output(ARDUNO_SERIAL, GPIO.HIGH)
     #GPIO.output(GSM_SERIAL, GPIO.LOW)   
     
-    adrino = serial.Serial('/dev/ttyACM0', 9600)
-    adrino.write("DATARQST")
+    ARDUNO_SER = serial.Serial()
+    ARDUNO_SER.port = "/dev/ttyAMA0"
+    ARDUNO_SER.baudrate = 9600
+    ARDUNO_SER.timeout = 3
+    ARDUNO_SER.xonxoff = False
+    ARDUNO_SER.rtscts = False
+    ARDUNO_SER.bytesize = serial.EIGHTBITS
+    ARDUNO_SER.parity = serial.PARITY_NONE
+    ARDUNO_SER.stopbits = serial.STOPBITS_ONE
+    
+    
+    #Sending Data to serial
+    ARDUNO_SER.adrino.write("DATARQST")
     
     '''insert sensor values into list'''    
     for i in range(1,3):
