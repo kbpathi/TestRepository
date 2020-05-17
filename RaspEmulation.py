@@ -303,13 +303,13 @@ class gsm():
 
 
     def getResponse(self):
-    
+
         try:
             self.serialPort.flushInput()
             self.serialPort.flushOutput()
-        if gsm.echo_on == 1:
-            response = self.serialPort.readline()  # comment this line if echo off
-        response = self.serialPort.readline()
+            if gsm.echo_on == 1:
+                response = self.serialPort.readline()  # comment this line if echo off
+            response = self.serialPort.readline()
         except:
             print 'Cannot open serial port'
             sys.exit()
@@ -330,6 +330,7 @@ class gsm():
 
     def sendMessage(self,phone_number, message):
         flag = False
+        print "In Send SMS"
         try: 
             self.sendCommand('AT+CMGS=\"' + phone_number + '\"')
             time.sleep(0.5)
@@ -339,19 +340,29 @@ class gsm():
         except:
             print 'Cannot open serial port'
             sys.exit()
+            
         flag = True
         time.sleep(2)
         print self.getResponse
         return flag
 
 def sendGPRSdata():
-    now = datetime.now()
     timestamp = time.strftime("%Y%m%d%H%M%S")
     gsm_ser = serial.Serial()
     gsm_ser.port = "/dev/ttyAMA0"
     gsm_ser.baudrate = 9600
-    GSM = gsm(gsm_ser)
     
+    print "In Send GPRS routine which Sends data to database"
+    
+    try:
+        gsm_ser.open()
+        gsm_ser.flushInput()
+        gsm_ser.flushOutput()
+    except:
+        print 'Cannot open serial port'
+        sys.exit()    
+    
+    GSM = gsm(gsm_ser)
     '''attach or detach the device to packet domain service'''
     GSM.sendCommand("AT+CGATT=1\r") 
     time.sleep(0.5)
@@ -376,7 +387,7 @@ def sendGPRSdata():
     GSM.sendCommand("AT+HTTPINIT\r") 
     time.sleep(0.5)
     if( GSM.getResponse() != 'OK'): return False
-
+    
     '''Send sensor data to database through PHP url page'''
     GSM.sendCommand("AT+HTTPPARA=\"URL\",\"http://someserverlocation.com/putnewdata.php?")
     GSM.sendCommand("?timestamp=" )
@@ -390,21 +401,22 @@ def sendGPRSdata():
     GSM.sendCommand("\r\r")
     time.sleep(5)
     if( GSM.getResponse() != 'OK'): return False     
-
+    
     '''Get http session start '''
     GSM.sendCommand("AT+HTTPACTION=0\r") 
     time.sleep(0.5)
     if( GSM.getResponse() != 'OK'): return False
-   
+    
     ''' read the data from http server '''
     GSM.sendCommand("AT+HTTPREAD\r") 
     time.sleep(0.5)
     if( GSM.getResponse() != 'OK'): return False
-
+    
     ''' Terminate http service '''
     GSM.sendCommand("AT+HTTPTERM\r") 
     time.sleep(0.5)
     if( GSM.getResponse() != 'OK'): return False     
+
     
 #-----------------------------------------------------------------------------------------------
 def gsm_init():
@@ -427,8 +439,7 @@ def gsm_init():
         gsm_ser.open()
         gsm_ser.flushInput()
         gsm_ser.flushOutput()
-
-        
+   
     except:
         print 'Cannot open serial port'
         sys.exit()
@@ -458,15 +469,6 @@ def gsm_init():
     GSM.sendCommand("AT+CIICR\r")
     time.sleep(0.5)
     if( GSM.getResponse() != 'OK'): return False
-
-    GSM.sendCommand("AT+CIFSR\r")
-    time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return False
-
-    GSM.sendCommand("AT+CIPSPRT=1\r")
-    time.sleep(0.5)
-    if( GSM.getResponse() != 'OK'): return False
-
     
 #----------------------------------------------------------------------------------
 
@@ -485,11 +487,11 @@ def checkAnyCritical():
     gsm_ser.parity = serial.PARITY_NONE
     gsm_ser.stopbits = serial.STOPBITS_ONE
     
+    print "checkAnyCritical routine will check values to Alert immediatly through SMS"
     try:
         gsm_ser.open()
         gsm_ser.flushInput()
         gsm_ser.flushOutput()
-
         
     except:
         print 'Cannot open serial port'
@@ -527,6 +529,8 @@ def requestForSensorData():
     ARDUNO_SER.parity = serial.PARITY_NONE
     ARDUNO_SER.stopbits = serial.STOPBITS_ONE
     
+    print "in the routine which request the data from Arduino Board through Serial"
+    
     try:
         ARDUNO_SER.open()
         ARDUNO_SER.flushInput()
@@ -546,6 +550,9 @@ def requestForSensorData():
 #----------------------------------------------------------------------------------
     
 if __name__ == "__main__":
+    
+    print "In main function routine of IoT Health Mangement System"
+    print "Initializing the sensors, LCD, Serial etc..."
     lcd = Adafruit_CharLCD()
     lcd.clear()
    
