@@ -290,24 +290,34 @@ class Adafruit_CharLCD(object):
 
 class gsm():
     echo_on = 1
-    def __init__(self,serialPort):               #port initialization
+    def __init__(self,serialPort):   
+            #port initialization
         self.serialPort = serialPort
 
     def sendCommand(self,at_com):
-        self.serialPort.write(at_com + '\r')
+        try:
+            self.serialPort.write(at_com + '\r')
+        except:
+            print 'Cannot open serial port'
+            sys.exit()
 
 
     def getResponse(self):
-        self.serialPort.flushInput()
-        self.serialPort.flushOutput()
+    
+        try:
+            self.serialPort.flushInput()
+            self.serialPort.flushOutput()
         if gsm.echo_on == 1:
             response = self.serialPort.readline()  # comment this line if echo off
         response = self.serialPort.readline()
+        except:
+            print 'Cannot open serial port'
+            sys.exit()
         response = response.rstrip()
         lcd.clear()
         lcd.message(response)
         return response
-
+        
 
     def getPrompt(self):
         if gsm.echo_on == 1:
@@ -320,11 +330,15 @@ class gsm():
 
     def sendMessage(self,phone_number, message):
         flag = False
-        self.sendCommand('AT+CMGS=\"' + phone_number + '\"')
-        time.sleep(0.5)
-        print 'SUCCESS'
-        self.serialPort.write(message)
-        self.serialPort.write('\x1A')  # send messsage if prompt received
+        try: 
+            self.sendCommand('AT+CMGS=\"' + phone_number + '\"')
+            time.sleep(0.5)
+            print 'SUCCESS'
+            self.serialPort.write(message)
+            self.serialPort.write('\x1A')  # send messsage if prompt received
+        except:
+            print 'Cannot open serial port'
+            sys.exit()
         flag = True
         time.sleep(2)
         print self.getResponse
